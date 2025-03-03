@@ -1,0 +1,57 @@
+.footer {
+  background-color: black;
+  color: white;
+  position: relative;
+  padding: 20px 0;
+  text-align: center;
+  overflow: hidden; /* Prevents content from overflowing */
+}
+
+.footer-content {
+  text-align: center;
+}
+
+.footer-content p {
+  margin-bottom: 10px; /* Space between text and icons */
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  flex-direction: row; /* Default: Horizontal layout */
+  justify-content: center; /* Center icons */
+  align-items: center;
+  gap: 10px; /* Space between icons */
+  margin-top: 10px; /* Space from text */
+}
+
+/* Make icons bigger and evenly spaced */
+.social-icons a {
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 40px;
+  height: 40px;
+}
+
+.social-icons a:hover {
+  color: #ccc;
+}
+
+/* Responsive: Move icons below on small screens */
+@media (max-width: 768px) {
+  .social-icons {
+    /* flex-direction: column; Stack icons vertically */
+    gap: 5px; /* Reduce gap */
+    margin-top: 15px; /* Add some space from the text */
+  }
+
+  .social-icons a {
+    margin: 3px 0; /* Adjust spacing */
+    width: 35px;
+    height: 35px;
+  }
+}

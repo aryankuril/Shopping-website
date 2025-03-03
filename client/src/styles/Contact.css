@@ -1,0 +1,83 @@
+/* Contact.css */
+
+.contact-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  background: linear-gradient(to bottom right, #007bff, #00c6ff);
+  padding: 20px;
+}
+
+.contact-box {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  padding: 20px; /* Reduced padding */
+  max-width: 450px; /* Reduced width */
+  width: 100%;
+  text-align: center;
+}
+
+.contact-box h2 {
+  font-size: 24px; /* Reduced font size */
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.contact-box p {
+  font-size: 14px; /* Reduced font size */
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Reduced gap between fields */
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 12px; /* Reduced padding */
+  font-size: 14px; /* Reduced font size */
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Slightly smaller border-radius */
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+}
+
+textarea {
+  resize: none;
+}
+
+.btn-send {
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  color: white;
+  border: none;
+  padding: 10px 15px; /* Reduced padding */
+  font-size: 14px; /* Reduced font size */
+  border-radius: 40px; /* Smaller button radius */
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-send:hover {
+  background: linear-gradient(to right, #0056b3, #0099cc);
+  transform: translateY(-2px);
+}
+
+.btn-send:active {
+  transform: translateY(0);
+}
