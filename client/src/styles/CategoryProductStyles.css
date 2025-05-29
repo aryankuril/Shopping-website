@@ -36,3 +36,60 @@
 .category .card-img-top {
   height: 300px !important;
 }
+
+@media (max-width: 480px) {
+  .category .row {
+    margin: 0 !important;
+    gap: 2px !important;
+    justify-content: center !important;
+  }
+
+  .category .col {
+    padding: 2px !important;
+    margin: 2px !important;
+    
+  }
+
+  .category .card {
+   
+    display: flex;
+    flex-direction: row;
+    width: 100% !important;
+    height: 300px;
+    margin: 2px !important;
+    padding: 0 !important;
+    background-color: rgba(128, 128, 128, 0.05);
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .category .card-img-top {
+    width: 50%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .category .card-body {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .category .card-name-price {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+
+  .category .card-text {
+    font-size: 12px;
+    margin: 5px 0;
+  }
+
+  .category button {
+    height: 100%;
+    font-size: 10px;
+  }
+}

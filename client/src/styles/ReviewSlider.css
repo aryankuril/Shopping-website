@@ -1,0 +1,95 @@
+/* ReviewSlider.css */
+
+.review-slider-container {
+  background-color: #fff;
+  padding: 60px 20px;
+  text-align: center;
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.review-slider-container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.review-card {
+  max-width: 700px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  position: relative;
+
+  /* ✅ Add these lines */
+  height: 200px; /* or whatever fixed height works for your design */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.review-card::before {
+  content: '“';
+  font-size: 100px;
+  color: #fce4ec;
+  position: absolute;
+  top: -40px;
+  left: -20px;
+  font-family: serif;
+}
+
+.review-card::after {
+  content: '”';
+  font-size: 100px;
+  color: #fce4ec;
+  position: absolute;
+  bottom: -40px;
+  right: -20px;
+  font-family: serif;
+}
+
+.review-text {
+  font-size: 18px;
+  color: #444;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.review-name {
+  font-weight: 600;
+  color: #111;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.stars {
+  color: #ffc107;
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+/* Slick overrides */
+.slick-dots li button:before {
+  font-size: 8px;
+  color:rgb(0, 0, 0);
+}
+
+.slick-dots li.slick-active button:before {
+  color: #000000;
+}
+
+/* .slick-prev, .slick-next {
+  background-color:#ffffff;
+  border-radius: 50%;
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+}
+
+.slick-prev::before, .slick-next::before {
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+} */

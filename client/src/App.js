@@ -16,6 +16,7 @@ import CreateProduct from "./pages/Admin/CreateProduct";
 import Users from "./pages/Admin/Users";
 import Orders from "./pages/user/Orders";
 import Profile from "./pages/user/Profile";
+import Address from "./pages/user/address";
 import Products from "./pages/Admin/Products";
 import UpdateProduct from "./pages/Admin/UpdateProduct";
 import Search from "./pages/Search";
@@ -27,9 +28,11 @@ import AdminOrders from "./pages/Admin/AdminOrders";
 import AdminSliderUpload from "./pages/Admin/AdminSliderUpload";
 import AdminCoupons from "./pages/Admin/AdminCoupons";
 import "./App.css"; 
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() { 
   return (
+    <GoogleOAuthProvider clientId="346408017106-5cp9ri7v1ilmbvgvca79iegmgi7k94tc.apps.googleusercontent.com"> 
     <>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -42,6 +45,7 @@ function App() {
           <Route path="user" element={<Dashboard />} />
           <Route path="user/orders" element={<Orders />} />
           <Route path="user/profile" element={<Profile />} />
+          <Route path="user/address" element={<Address />} />
         </Route>
         <Route path="/dashboard" element={<AdminRoute />}>
           <Route path="admin" element={<AdminDashboard />} />
@@ -63,6 +67,7 @@ function App() {
         <Route path="*" element={<Pagenotfound />} />
       </Routes>
     </>
+    </GoogleOAuthProvider>
   );
 }
 

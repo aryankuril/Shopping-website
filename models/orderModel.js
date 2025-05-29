@@ -8,7 +8,26 @@ const orderSchema = new mongoose.Schema(
         ref: "Products",
       },
     ],
-    payment: {},
+    payment: {
+      method: {
+        type: String,
+        enum: ["online", "cod"],
+        required: true,
+      },
+      status: {
+        type: String,
+        enum: ["Paid", "Pending"],
+        default: "Pending",
+      },
+      success: {
+        type: Boolean,
+        default: false,
+      },
+      details: {
+        type: Object, // for online payments (e.g., Razorpay, Stripe)
+        default: {},
+      },
+    },
     buyer: {
       type: mongoose.ObjectId,
       ref: "users",

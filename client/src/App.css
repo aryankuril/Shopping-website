@@ -1,69 +1,72 @@
 /* Slider Container */
 .slider-container {
-    width: 100%;
-    position: relative;
-    text-align: center;
-    margin-top: 62px; /* Prevents navbar overlap */
+  width: 100%;
+  position: relative;
+  text-align: center;
+  margin-top: 62px;
+  /* Prevents navbar overlap */
+}
+
+/* Slider Wrapper */
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Slider Image */
+.slider-image {
+  width: 100%;
+  max-width: 2000px;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Navigation Buttons */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+/* Position Left & Right Buttons */
+.slider-btn.left {
+  left: 10px;
+}
+
+.slider-btn.right {
+  right: 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .slider-container {
+    margin-top: 57px;
+    /* Adjust for smaller navbar */
   }
-  
-  /* Slider Wrapper */
-  .slider-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 100vw;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Slider Image */
+
   .slider-image {
-    width: 100%;
-    max-width: 1550px;
-    height: auto;
-    max-height: 300px;
-    object-fit: cover;
-    transition: opacity 0.5s ease-in-out;
+    max-width: 100%;
+    height: 150px;
+    /* max-height: 800px; Smaller height for mobile */
   }
-  
-  /* Navigation Buttons */
+
   .slider-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background:transparent;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    font-size: 24px;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 10;
+    padding: 8px 12px;
+    font-size: 18px;
   }
-  
-  /* Position Left & Right Buttons */
-  .slider-btn.left {
-    left: 10px;
-  }
-  
-  .slider-btn.right {
-    right: 10px;
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .slider-container {
-        margin-top: 57px;/* Adjust for smaller navbar */
-    }
-    .slider-image {
-      max-width: 100%;
-      height: 150px;
-      /* max-height: 800px; Smaller height for mobile */
-    }
-    .slider-btn {
-      padding: 8px 12px;
-      font-size: 18px;
-    }
-  }
-  
+}

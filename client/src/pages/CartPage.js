@@ -19,14 +19,63 @@ const CartPage = () => {
   const [discount, setDiscount] = useState(0); // Store discount percentage
   const navigate = useNavigate();
 
+
+
+
+
+  const handleCODOrder = async () => {
+    try {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const auth = JSON.parse(localStorage.getItem("auth")) || {};
+      const user = auth?.user;
+  
+      console.log("Cart Items:", cart);
+      console.log("User Info:", user);
+  
+      if (!cart.length || !user) {
+        alert("Missing cart items or user info");
+        return;
+      }
+  
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          products: cart.map((item) => item._id),
+          buyer: user._id,
+          paymentMethod: "cod",
+        }),
+      });
+  
+      const data = await res.json();
+      console.log("Order Response:", data);
+  
+      if (data.success) {
+        alert("Order placed successfully with Cash on Delivery");
+        localStorage.removeItem("cart");
+        window.location.href = "/dashboard/user/orders";
+      } else {
+        alert("Failed to place COD order: " + data.error);
+      }
+    } catch (err) {
+      console.error("COD Order Failed", err);
+      alert("Failed to place COD order");
+    }
+  };
+  
+  
+  
   // total price with discount applied
   // total price with discount applied
 const totalPrice = () => {
   try {
     let total = 0;
-    cart?.map((item) => {
+    cart?.forEach((item) => {
       total += item.price;
     });
+    
     total -= discount; // Subtract the discount amount from the total price
     return total.toLocaleString("en-US", {
       style: "currency",
@@ -90,9 +139,10 @@ const applyCoupon = async () => {
 // Calculate discount amount based on the percentage
 const calculateDiscountAmount = (discountPercentage) => {
   let total = 0;
-  cart?.map((item) => {
+  cart?.forEach((item) => {
     total += item.price;
   });
+  
   const discountAmount = (total * discountPercentage) / 100; // Calculate the discount based on the percentage
   return discountAmount;
 };
@@ -124,7 +174,7 @@ const calculateDiscountAmount = (discountPercentage) => {
   };
 
   return (
-    <Layout>
+    <Layout >
       <div className="cart-page">
         <div className="row">
           <div className="col-md-12">
@@ -157,8 +207,8 @@ const calculateDiscountAmount = (discountPercentage) => {
                     />
                   </div>
                   <div className="col-md-4">
-                    <p>Name : {p.name}</p>
-                    <p>Description : {p.description.substring(0, 30)}</p>
+                    <p>Name : {p.name.substring(0, 30)}</p>
+                    <p>Description : {p.description.substring(0, 100)}</p>
                     <p>Price : {p.price}</p>
                   </div>
                   <div className="col-md-4 cart-remove-btn">
@@ -196,14 +246,14 @@ const calculateDiscountAmount = (discountPercentage) => {
                 </button>
               </div>
 
-              {auth?.user?.address ? (
+              {auth?.user?.selectedAddress ? (
                 <>
                   <div className="mb-3">
                     <h4>Current Address</h4>
-                    <h5>{auth?.user?.address}</h5>
+                    <h5>{auth?.user?.selectedAddress}</h5>
                     <button
                       className="btn btn-outline-warning"
-                      onClick={() => navigate("/dashboard/user/profile")}
+                      onClick={() => navigate("/dashboard/user/address")}
                     >
                       Update Address
                     </button>
@@ -232,6 +282,10 @@ const calculateDiscountAmount = (discountPercentage) => {
                   )}
                 </div>
               )}
+
+<button onClick={handleCODOrder}>
+  Cash on Delivery (COD)
+</button>
 
               <div className="mt-2">
                 {!clientToken || !auth?.token || !cart?.length ? (

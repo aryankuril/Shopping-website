@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/CategoryProductStyles.css";
@@ -9,21 +9,23 @@ const CategoryProduct = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
 
-  useEffect(() => {
-    if (params?.slug) getPrductsByCat();
-  }, [params?.slug]);
-  const getPrductsByCat = async () => {
-    try {
-      const { data } = await axios.get(
-        `/api/v1/product/product-category/${params.slug}`
-      );
-      setProducts(data?.products);
-      setCategory(data?.category);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // Wrap it so it doesn't change on every render
+const getPrductsByCat = useCallback(async () => {
+  try {
+    const { data } = await axios.get(
+      `/api/v1/product/product-category/${params.slug}`
+    );
+    setProducts(data?.products);
+    setCategory(data?.category);
+  } catch (error) {
+    console.log(error);
+  }
+}, [params.slug]); // include dependencies the function uses
 
+// Now use it safely in useEffect
+useEffect(() => {
+  if (params?.slug) getPrductsByCat();
+}, [params.slug, getPrductsByCat]);
   return (
     <Layout>
       <div className="container mt-3 category">
@@ -41,17 +43,20 @@ const CategoryProduct = () => {
                   />
                   <div className="card-body">
                     <div className="card-name-price">
-                      <h5 className="card-title">{p.name}</h5>
-                      <h5 className="card-title card-price">
-                        {p.price.toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                        })}
-                      </h5>
+                      <h5 className="card-title">{p.name.substring(0, 30)}</h5>
+                      
                     </div>
                     <p className="card-text ">
-                      {p.description.substring(0, 60)}...
+                      {p.description.substring(0, 100)}...
                     </p>
+                    <h5 className="card-title card-price">
+                      ₹{p.price.toLocaleString("en-US"
+                        // , {
+                        //   style: "currency",
+                        //   currency: "USD",
+                        // }
+                        )}
+                      </h5>
                     <div className="card-name-price">
                       <button
                         className="btn btn-info ms-1"

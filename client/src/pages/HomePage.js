@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices";
 import { useCart } from "../context/cart";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Layout from "./../components/Layout/Layout";
 import { AiOutlineReload } from "react-icons/ai";
 import "../styles/Homepage.css";
 import Slider from "../components/Routes/Slider";
+ import HomeReviewSlider from "./HomeReviewSlider";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -21,9 +23,18 @@ const HomePage = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [sliderImages, setSliderImages] = useState([]);
-  const [error, setError] = useState("");
+  const [ setError] = useState("");
 
 
+  // latest product
+  useEffect(() => {
+    // Fetch products from your API (replace with your actual API)
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+  }, []);
+
+  const latestProducts = products.slice(0, 5);
 
   // Fetch all categories and slider images in parallel for better performance
   const fetchData = async () => {
@@ -42,6 +53,10 @@ const HomePage = () => {
       console.error("Fetch Error:", error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   //get all cat
   const getAllCategory = async () => {
@@ -86,7 +101,9 @@ const HomePage = () => {
     if (page === 1) return;
     loadMore();
   }, [page]);
-  //load more
+
+
+  //loadmore
   const loadMore = async () => {
     try {
       setLoading(true);
@@ -129,8 +146,10 @@ const HomePage = () => {
       console.log(error);
     }
   };
+
+  
   return (
-    <Layout title={"ALl Products - Best offers "}>
+    <Layout title={"ALl Products - Best offers "}categories={categories}>
       <Slider images={sliderImages} />
       <div className="container-fluid row mt-3 home-page">
         <div className="col-md-3 filters">
@@ -169,25 +188,25 @@ const HomePage = () => {
           <h1 className="text-center">All Products</h1>
           <div className="d-flex flex-wrap">
             {products?.map((p) => (
-              <div className="card m-2" key={p._id}>
+              <div className="card m-2" key={p._id} >
                 <img
-                  src={`/api/v1/product/product-photo/${p._id}`}
+                   src={`/api/v1/product/product-photo/${p._id}`}
                   className="card-img-top"
                   alt={p.name}
                 />
                 <div className="card-body">
                   <div className="card-name-price">
-                    <h5 className="card-title">{p.name}</h5>
-                    <h5 className="card-title card-price">
-                      {p.price.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
-                    </h5>
+                    <h5 className="card-title">{p.name.substring(0, 40)}...</h5>
+                    
+                   
                   </div>
                   <p className="card-text ">
-                    {p.description.substring(0, 60)}...
+                    {p.description.substring(0, 100)}...
                   </p>
+                  <h5 className="card-title card-price">
+                  <h5 className="card-title">₹{p.price}</h5>
+                  </h5>
+
                   <div className="card-name-price">
                     <button
                       className="btn btn-info ms-1"
@@ -236,9 +255,84 @@ const HomePage = () => {
         </div>
       </div>
 
+      <div className="features-section">
+  <div className="feature-box">
+    <img src="/images/delivery-truck.png" alt="Fast Delivery" />
+    <h4>Fast Delivery</h4>
+    <p>Get your products delivered to your doorstep in record time, wherever you are.</p>
+  </div>
+  <div className="feature-box">
+    <img src="/images/credit-card.png" alt="Secure Payments" />
+    <h4>Secure Payments</h4>
+    <p>Enjoy hassle-free transactions with our trusted and secure payment gateways.</p>
+  </div>
+  <div className="feature-box">
+    <img src="/images/ranking.png" alt="Top Quality Products" />
+    <h4>Top-Quality Products</h4>
+    <p>We offer only the best, tested, and certified products to ensure customer satisfaction.</p>
+  </div>
+  <div className="feature-box">
+    <img src="/images/cash-on-delivery.png" alt="Easy Returns" />
+    <h4>Cash on Delivery</h4>
+  <p>Pay only when your product is delivered. Safe and simple shopping experience.</p>
+  </div>
+</div>
+
+{/* latest product  */}
+
+    <div className="latest-arrivals-section">
+      <div className="arrival-left">
+        <h2>
+          Our <br /> <strong>Latest Arrivals</strong>
+        </h2>
+        <p>
+          Discover cutting-edge designs and innovative products that just
+          landed. Stay ahead of the trends.
+        </p>
+        <Link to="/categories">
+          <button className="explore-btn">Explore Now</button>
+        </Link>
+        
+      </div>
+
+      <div className="arrival-right">
+      {latestProducts.map((product) => (
+          <div className="product-card" key={product._id}>
+            <div className="image-container">
+              <img src={`/api/v1/product/product-photo/${product._id}`}
+                alt={product.name} />
+              
+            </div>
+            <h4>{product.name.substring(0, 30)}...</h4>
+            <p>{product.description.substring(0, 30)}...</p>
+            <p className="price">₹{product.price.toFixed(2)}</p>
+            
+            <div className="card-actions">
+              {/* <button className="buy-btn">Buy Now</button> */}
+              <button
+                      className="buy-btn "
+                      onClick={() => navigate(`/product/${product.slug}`)}
+                    >
+                      Buy Now
+                    </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+
+
+
+
+    
+    <HomeReviewSlider />
+
+
 <div class="whatsapp_float">
-        <a href="https://wa.me/918879961503" target="_blank">
-        <img src="images/whatsapp.png" width="50px" />
+        {/* <a href="https://wa.me/918879961503" target="_blank"> */}
+        <a href="https://chat.whatsapp.com/Gi1kjslgyfbEQxbRzoWDsE" target="_blank" rel="noreferrer">
+        <img src="images/whatsapp.png" width="50px" alt="whatsapp.png"  />
         <i class="fa fa-whatsapp whatsapp-icon"></i>
         </a>
       

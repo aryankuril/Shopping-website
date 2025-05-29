@@ -1,17 +1,151 @@
-.product-details {
-  margin-top: 100px !important;
+.product-details-page {
+  margin-top: 80px;
+  padding: 0 20px;
 }
 
-.product-details-info {
+.product-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  /* justify-content: center;
+  align-items: flex-start; */
+}
+
+/* Move the product gallery further left using !important */
+.product-gallery {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
-  justify-content: center;
+  gap: 10px;
+  margin-left: -90px !important;
 }
 
-.product-details-info h6 {
+.thumbnail-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.main-product-image img {
+  width: 500px;
+  height: 500px;
+  object-fit: cover;
+}
+
+.zoomed-img {
+  transform: scale(2);
+  transition: transform 0.3s ease;
+  cursor: zoom-out;
+}
+
+
+.zoomable-image:hover {
+  transform: scale(1.5);
+  /* Zoom level */
+  cursor: zoom-out;
+}
+
+/* Remove gap between product name and product category */
+.product-info {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 0 !important;
+}
+
+.product-info h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 15px !important;
+
+}
+
+.product-info .category {
+  margin: 0 !important;
+  font-size: 20px;
+  color: crimson;
+  font-weight: 500;
   margin-bottom: 20px !important;
 }
+
+.product-info .price {
+  font-size: 25px;
+  font-weight: bold;
+  color: #000;
+}
+
+.product-info .description {
+  color: #666;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-buy,
+.btn-cart {
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+
+}
+
+.btn-buy {
+  background: rgb(1, 0, 0);
+  color: #fff;
+}
+
+.btn-cart {
+  background: #f2f2f2;
+  color: #000;
+
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product-gallery {
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 0 !important;
+    /* Remove negative margin for mobile */
+  }
+
+  .thumbnail-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .main-product-image img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .product-info {
+    text-align: center;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .btn-buy,
+  .btn-cart {
+    width: 100%;
+  }
+}
+
+
+
 
 .similar-products .card {
   background-color: rgba(128, 128, 128, 0.097);
@@ -28,6 +162,7 @@
   color: green;
   font-weight: bold;
 }
+
 .similar-products button {
   border-radius: 0;
   width: 100%;
@@ -47,4 +182,290 @@
 
 .similar-products .card-img-top {
   height: 300px !important;
+}
+
+@media (max-width: 480px) {
+  .similar-products .row {
+    margin: 0 !important;
+    gap: 2px !important;
+  }
+
+  .similar-products .col {
+    padding: 2px !important;
+    margin: 2px !important;
+  }
+
+  .similar-products .card {
+    display: flex;
+    flex-direction: row;
+    width: 100% !important;
+    height: 300px;
+    margin: 2px !important;
+    padding: 0 !important;
+    background-color: rgba(128, 128, 128, 0.05);
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .similar-products .card-img-top {
+    width: 50%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .similar-products .card-body {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .similar-products .card-name-price {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+
+  .similar-products .card-text {
+    font-size: 12px;
+    margin: 5px 0;
+  }
+
+  .similar-products button {
+    font-size: 10px;
+    height: 100%;
+  }
+}
+
+
+
+
+
+
+.review-modal {
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content-ui {
+  background: linear-gradient(to bottom, #0f62fe 0%, #0f62fe 45%, #fff 45%);
+  padding: 30px 20px 25px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Modal Heading */
+.modal-content-ui h5 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+/* Textarea */
+.modal-content-ui textarea {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #f1f1f1;
+  resize: none;
+  outline: none;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* Star Rating */
+.star-rating {
+  font-size: 24px;
+  color: #ccc;
+}
+
+.star-rating .star {
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin: 0 3px;
+}
+
+.star-rating .star.filled {
+  color: #ffc107;
+}
+
+/* Buttons */
+.modal-content-ui button {
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-top: 10px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.modal-content-ui .btn-primary {
+  background-color: #0f62fe;
+  color: white;
+}
+
+.modal-content-ui .btn-secondary {
+  background-color: #cccccc;
+  color: #000;
+  margin-right: 10px;
+}
+
+
+.features-section {
+  display: flex;
+  margin-top: 50px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 40px 60px;
+  background-color: #F7F7F7;
+  text-align: center;
+  gap: 20px;
+}
+
+.feature-box {
+  flex: 1 1 20%;
+  min-width: 200px;
+  padding: 20px;
+}
+
+.feature-box img {
+  width: 50px;
+  margin-bottom: 15px;
+}
+
+.feature-box h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1e1e1e;
+}
+
+.feature-box p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .modal-content-ui {
+    width: 95%;
+    padding: 18px 15px;
+    border-radius: 16px;
+  }
+
+  .modal-content-ui h5 {
+    font-size: 18px;
+  }
+
+  .modal-content-ui textarea {
+    font-size: 13px;
+  }
+
+  .star-rating {
+    font-size: 20px;
+  }
+
+  .modal-content-ui button {
+    font-size: 14px;
+    padding: 10px 12px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+  .modal-content-ui h5 {
+    font-size: 16px;
+  }
+
+  .star-rating {
+    font-size: 18px;
+  }
+
+  .modal-content-ui textarea {
+    font-size: 12px;
+  }
+}
+
+/* discription */
+.product-details-page {
+  margin-top: 80px;
+  padding: 0 20px;
+}
+
+/* For the short snippet */
+.description {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* 'View More' button style inside the text */
+.view-more-btn {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* Full description section at the bottom */
+.full-description {
+  max-width: 1400px;
+  /* limit width for better readability */
+  margin: 60px auto 40px;
+  /* 60px top, auto left/right, 40px bottom */
+  padding: 0 20px;
+  /* small side padding */
+  text-align: left;
+  /* left-align text, as in your screenshot */
+}
+
+/* Heading styling */
+.full-description h3 {
+  font-size: 24px;
+  color: #111;
+  /* darker text for the heading */
+  font-weight: 600;
+  margin-bottom: 15px;
+  border-left: 3px solid red;
+  padding-left: 10px;
+  /* slight indentation matching the red border */
+}
+
+/* Paragraph styling */
+.full-description p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #555;
+  white-space: pre-wrap;
+  /* keeps new lines if any in your description */
+  margin-bottom: 20px;
+}
+
+/* Optional: "View More" link styling if you keep it near or in this section */
+.view-more-btn {
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: red;
+  cursor: pointer;
+  margin-left: 5px;
 }

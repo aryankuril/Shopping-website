@@ -8,13 +8,15 @@ import {
   getOrdersController,
   getAllOrdersController,
   orderStatusController,
+  googleLoginController ,
 } from "../controllers/authController.js";
+import { getAllUsersController } from '../controllers/userController.js';
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 
 //router object
 const router = express.Router();
-
-//routing
+// Define the endpoint to get all users
+router.get('/all-users', getAllUsersController);
 //REGISTER || METHOD POST
 router.post("/register", registerController);
 
@@ -52,5 +54,7 @@ router.put(
   isAdmin,
   orderStatusController
 );
+
+router.post("/google-login",googleLoginController );
 
 export default router;

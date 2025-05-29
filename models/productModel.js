@@ -27,10 +27,12 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    photo: {
-      data: Buffer,
-      contentType: String,
-    },
+    images: [
+      {
+        data: Buffer,
+        contentType: String,
+      },
+    ],
     shipping: {
       type: Boolean,
     },
@@ -42,7 +44,6 @@ const productSchema = new mongoose.Schema(
         createdAt: { type: Date, default: Date.now },
       },
     ],
-  
   },
   { timestamps: true }
 );

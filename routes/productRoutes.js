@@ -1,4 +1,5 @@
 import express from "express";
+import multer from "multer";  
 import {
   brainTreePaymentController,
   braintreeTokenController,
@@ -15,19 +16,28 @@ import {
   searchProductController,
   updateProductController,
   addReviewController,
+  placeOrder,
   // deleteReviewController,
 } from "../controllers/productController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
-import formidable from "express-formidable";
+
+
 
 const router = express.Router();
+// configure multer to keep files in memory so you can push them into Mongo
+const storage = multer.memoryStorage();
+const uploadImages = multer({ storage }).array("images", 10);  // up to 10 images
 
+
+
+router.post("/orders", placeOrder);
+ 
 //routes
 router.post(
   "/create-product",
   requireSignIn,
   isAdmin,
-  formidable(),
+  uploadImages, 
   createProductController
 );
 //routes
@@ -35,7 +45,7 @@ router.put(
   "/update-product/:pid",
   requireSignIn,
   isAdmin,
-  formidable(),
+  uploadImages, 
   updateProductController
 );
 

@@ -18,16 +18,25 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
+      required: false, // ✅ now optional
     },
     address: {
-      type: {},
-      required: true,
+      type: String,
+      required: false,
+    },
+    addresses: {
+      type: [String],
+      default: [],
+    },
+    selectedAddress: {
+      type: String,
+      default: "",
     },
     answer: {
       type: String,
-      required: true,
+      required: false,  // ✅ now optional
     },
+    
     role: {
       type: Number,
       default: 0,

@@ -90,7 +90,7 @@ export const loginController = async (req, res) => {
     }
     //token
     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "30d",
     });
     res.status(200).send({
       success: true,
@@ -167,7 +167,7 @@ export const testController = (req, res) => {
 //update prfole
 export const updateProfileController = async (req, res) => {
   try {
-    const { name, email, password, address, phone } = req.body;
+    const { name, email, password, address, phone , addresses, selectedAddress } = req.body;
     const user = await userModel.findById(req.user._id);
     //password
     if (password && password.length < 6) {
@@ -181,6 +181,8 @@ export const updateProfileController = async (req, res) => {
         password: hashedPassword || user.password,
         phone: phone || user.phone,
         address: address || user.address,
+        addresses: addresses|| user.addresses,
+        selectedAddress: selectedAddress || user.selectedAddress,
       },
       { new: true }
     );
@@ -222,7 +224,7 @@ export const getAllOrdersController = async (req, res) => {
     const orders = await orderModel
       .find({})
       .populate("products", "-photo")
-      .populate("buyer", "name")
+      .populate("buyer", "name phone address")
       .sort({ createdAt: "-1" });
     res.json(orders);
   } catch (error) {
@@ -255,3 +257,45 @@ export const orderStatusController = async (req, res) => {
     });
   }
 };
+
+export const googleLoginController = async (req, res) => {
+  try {
+    const { name, email, googleId } = req.body;
+
+    let user = await userModel.findOne({ email });
+
+    // If user doesn't exist, create with dummy required values
+    if (!user) {
+      user = await new userModel({
+        name,
+        email,
+        password: googleId,
+        phone: "N/A",
+        address: "N/A",
+        answer: "google-auth"
+      }).save();
+    }
+
+    const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged in successfully with Google",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
+      },
+      token,
+    });
+  } catch (error) {
+    console.error("Google login error:", error);
+    res.status(500).json({ success: false, message: "Google login error" });
+  }
+};
+

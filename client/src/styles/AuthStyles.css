@@ -61,3 +61,10 @@
 .forgot-btn:hover {
   color: white !important;
 }
+
+.google{
+  width: 250px;
+  margin-top: 10px;
+  border: 0 !important;
+
+}

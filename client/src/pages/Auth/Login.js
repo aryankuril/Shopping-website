@@ -5,6 +5,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import "../../styles/AuthStyles.css";
 import { useAuth } from "../../context/auth";
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode"; 
+import Cookies from "js-cookie";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +24,7 @@ const Login = () => {
       const res = await axios.post("/api/v1/auth/login", {
         email,
         password,
+        
       });
       if (res && res.data.success) {
         toast.success(res.data && res.data.message);
@@ -83,7 +88,55 @@ const Login = () => {
             LOGIN
           </button>
         </form>
-      </div>
+      <div className="google">
+      <GoogleLogin
+  onSuccess={async (credentialResponse) => {
+    try {
+      const decoded = jwtDecode(credentialResponse.credential);
+      const { name, email, sub: googleId } = decoded;
+
+      const res = await axios.post("/api/v1/auth/google-login", {
+        name,
+        email,
+        googleId,
+      });
+
+      if (res && res.data.success) {
+        // ✅ 1. Store token in cookies
+        Cookies.set("token", res.data.token, { expires: 7 });
+
+        // ✅ 2. Set auth context state
+        setAuth({
+          user: res.data.user,
+          token: res.data.token,
+        });
+
+        // ✅ 3. Store in localStorage for persistence
+        localStorage.setItem(
+          "auth",
+          JSON.stringify({
+            user: res.data.user,
+            token: res.data.token,
+          })
+        );
+
+        toast.success("Logged in with Google!");
+        navigate("/");
+      } else {
+        toast.error(res.data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Google login failed:", error);
+      toast.error("Google login failed");
+    }
+  }}
+  onError={() => {
+    console.log("Google login failed");
+    toast.error("Google login failed");
+  }}
+/>
+</div>
+</div>
     </Layout>
   );
 };

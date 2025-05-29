@@ -1,57 +1,146 @@
-.footer {
-  background-color: black;
-  color: white;
-  position: relative;
-  padding: 20px 0;
-  text-align: center;
-  overflow: hidden; /* Prevents content from overflowing */
+.footer-container {
+  background-color: #7f6868; /* Changed to black */
+  padding: 40px 20px 20px;
+  font-family: "Segoe UI", sans-serif;
+  color: #fff; /* White text for contrast */
+ 
+
 }
 
-.footer-content {
-  text-align: center;
-}
-
-.footer-content p {
-  margin-bottom: 10px; /* Space between text and icons */
-}
-
-/* Social Icons */
-.social-icons {
+.footer-grid {
   display: flex;
-  flex-direction: row; /* Default: Horizontal layout */
-  justify-content: center; /* Center icons */
-  align-items: center;
-  gap: 10px; /* Space between icons */
-  margin-top: 10px; /* Space from text */
+  flex-wrap: wrap;
+ 
+  gap: 10px; /* Reduced gap */
 }
 
-/* Make icons bigger and evenly spaced */
-.social-icons a {
-  color: white;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  width: 40px;
-  height: 40px;
+.footer-left {
+  flex: 1 1 220px;
 }
 
-.social-icons a:hover {
+.footer-logo {
+  max-width: 120px;
+  margin-bottom: 12px;
+}
+
+.footer-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  max-width: 280px;
   color: #ccc;
 }
 
-/* Responsive: Move icons below on small screens */
+.footer-social-icons a {
+  margin-right: 8px;
+  font-size: 18px;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.footer-social-icons a:hover {
+  color: #ccc;
+}
+
+.footer-categories {
+  flex: 1 1 220px;
+}
+
+.footer-categories h4 {
+  margin-bottom: 8px;
+}
+
+.category-columns {
+  display: flex;
+  gap: 20px; /* Less gap between columns */
+  flex-wrap: wrap;
+}
+
+.category-columns ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 100px;
+}
+
+.category-columns ul li {
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.category-columns ul li a {
+  text-decoration: none;
+  color: #ccc;
+}
+
+.category-columns ul li a:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+.footer-links,
+.footer-contact {
+  flex: 1 1 180px;
+}
+
+.footer-links h4,
+.footer-contact h4 {
+  margin-bottom: 8px;
+}
+
+.footer-links ul,
+.footer-contact ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links ul li {
+  margin-bottom: 4px;
+}
+
+.footer-links ul li a {
+  text-decoration: none;
+  color: #ccc;
+}
+
+.footer-links ul li a:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+.footer-contact p {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #ccc;
+}
+
+.footer-contact .highlight {
+  color: #ff4d4d;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 25px;
+  color: #aaa;
+  border-top: 1px solid #333;
+  padding-top: 10px;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .social-icons {
-    /* flex-direction: column; Stack icons vertically */
-    gap: 5px; /* Reduce gap */
-    margin-top: 15px; /* Add some space from the text */
+  .footer-grid {
+    flex-direction: column;
+    gap: 20px;
   }
 
-  .social-icons a {
-    margin: 3px 0; /* Adjust spacing */
-    width: 35px;
-    height: 35px;
+  .category-columns {
+    flex-direction: row;
+    gap: 15px;
+  }
+
+  .category-columns ul {
+    min-width: 45%;
   }
 }

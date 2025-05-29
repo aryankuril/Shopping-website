@@ -22,48 +22,56 @@ var gateway = new braintree.BraintreeGateway({
 });
 
 export const createProductController = async (req, res) => {
+  // DEBUG: ensure Multer parsed your files
+  console.log("🔍 Multer files:", req.files);
+
   try {
-    const { name, description, price, category, quantity, shipping } =
-      req.fields;
-    const { photo } = req.files;
-    //alidation
-    switch (true) {
-      case !name:
-        return res.status(500).send({ error: "Name is Required" });
-      case !description:
-        return res.status(500).send({ error: "Description is Required" });
-      case !price:
-        return res.status(500).send({ error: "Price is Required" });
-      case !category:
-        return res.status(500).send({ error: "Category is Required" });
-      case !quantity:
-        return res.status(500).send({ error: "Quantity is Required" });
-      case photo && photo.size > 1000000:
-        return res
-          .status(500)
-          .send({ error: "photo is Required and should be less then 1mb" });
+    // 1) Destructure all text fields from req.body
+    const { name, description, price, category, quantity, shipping } = req.body;
+
+    // 2) Basic validation
+    if (!name || !description || !price || !category || !quantity) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    const products = new productModel({ ...req.fields, slug: slugify(name) });
-    if (photo) {
-      products.photo.data = fs.readFileSync(photo.path);
-      products.photo.contentType = photo.type;
+    // 3) Build your new product document
+    const product = new productModel({
+      name,
+      slug: slugify(name),
+      description,
+      price,
+      category,
+      quantity,
+      shipping: shipping === "1" || shipping === true, // if you store as Boolean
+    });
+
+    // 4) Multer puts all uploaded files into req.files (an array)
+    if (req.files && req.files.length > 0) {
+      req.files.forEach((file) => {
+        product.images.push({
+          data: file.buffer,
+          contentType: file.mimetype,
+        });
+      });
     }
-    await products.save();
-    res.status(201).send({
+
+    // 5) Save and respond
+    await product.save();
+    return res.status(201).json({
       success: true,
-      message: "Product Created Successfully",
-      products,
+      message: "Product created successfully",
+      product,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error in crearing product",
+    console.error("💥 CREATE PRODUCT ERROR:", error);
+    return res.status(500).json({
+      message: error.message,
+      stack: error.stack, // you can remove stack in production
     });
   }
 };
+
+
 
 //get all products
 export const getProductController = async (req, res) => {
@@ -114,20 +122,22 @@ export const getSingleProductController = async (req, res) => {
 // get photo
 export const productPhotoController = async (req, res) => {
   try {
-    const product = await productModel.findById(req.params.pid).select("photo");
-    if (product.photo.data) {
-      res.set("Content-type", product.photo.contentType);
-      return res.status(200).send(product.photo.data);
+    const product = await productModel.findById(req.params.pid).select("images");
+
+    if (product?.images?.length > 0) {
+      res.set("Content-type", product.images[0].contentType); // Send the first image
+      return res.send(product.images[0].data);
+    } else {
+      return res.status(404).send("No image found");
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Erorr while getting photo",
-      error,
-    });
+    console.error("Error fetching product photo:", error);
+    res.status(500).send("Error while fetching image");
   }
 };
+
+
+
 
 //delete controller
 export const deleteProductController = async (req, res) => {
@@ -150,48 +160,48 @@ export const deleteProductController = async (req, res) => {
 //upate producta
 export const updateProductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity, shipping } =
-      req.fields;
-    const { photo } = req.files;
-    //alidation
-    switch (true) {
-      case !name:
-        return res.status(500).send({ error: "Name is Required" });
-      case !description:
-        return res.status(500).send({ error: "Description is Required" });
-      case !price:
-        return res.status(500).send({ error: "Price is Required" });
-      case !category:
-        return res.status(500).send({ error: "Category is Required" });
-      case !quantity:
-        return res.status(500).send({ error: "Quantity is Required" });
-      case photo && photo.size > 1000000:
-        return res
-          .status(500)
-          .send({ error: "photo is Required and should be less then 1mb" });
+    const { name, description, price, category, quantity, shipping } = req.fields;
+    const { images } = req.files;
+
+    const product = await productModel.findById(req.params.pid);
+    if (!product) {
+      return res.status(404).send({ message: "Product not found" });
     }
 
-    const products = await productModel.findByIdAndUpdate(
-      req.params.pid,
-      { ...req.fields, slug: slugify(name) },
-      { new: true }
-    );
-    if (photo) {
-      products.photo.data = fs.readFileSync(photo.path);
-      products.photo.contentType = photo.type;
+    product.name = name || product.name;
+    product.slug = slugify(name) || product.slug;
+    product.description = description || product.description;
+    product.price = price || product.price;
+    product.category = category || product.category;
+    product.quantity = quantity || product.quantity;
+    product.shipping = shipping || product.shipping;
+
+    // Handle new images if provided
+    if (images) {
+      const imageArray = Array.isArray(images) ? images : [images];
+      product.images = []; // Clear existing images if you want to replace them
+
+      for (const image of imageArray) {
+        const imgData = fs.readFileSync(image.path);
+        product.images.push({
+          data: imgData,
+          contentType: image.type,
+        });
+      }
     }
-    await products.save();
-    res.status(201).send({
+
+    await product.save();
+    res.status(200).send({
       success: true,
-      message: "Product Updated Successfully",
-      products,
+      message: "Product updated successfully",
+      product,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
+      message: "Error while updating product",
       error,
-      message: "Error in Updte product",
     });
   }
 };
@@ -351,34 +361,54 @@ export const brainTreePaymentController = async (req, res) => {
   try {
     const { nonce, cart } = req.body;
     let total = 0;
-    cart.map((i) => {
+    cart.forEach((i) => {
       total += i.price;
     });
-    let newTransaction = gateway.transaction.sale(
+
+    gateway.transaction.sale(
       {
-        amount: total,
+        amount: total.toFixed(2),
         paymentMethodNonce: nonce,
         options: {
           submitForSettlement: true,
         },
       },
-      function (error, result) {
-        if (result) {
+      async (error, result) => {
+        if (result?.success) {
+          // Create a new order
           const order = new orderModel({
-            products: cart,
-            payment: result,
+            products: cart.map((p) => p._id),
+            payment: {
+              method: "online",
+              status: "Paid",
+              success: true,
+              details: result,
+            },
+            
             buyer: req.user._id,
-          }).save();
-          res.json({ ok: true });
+            status: "Not Process",
+          });
+
+          await order.save();
+          res.json({ success: true });
         } else {
-          res.status(500).send(error);
+          console.error("Braintree error:", error || result?.message);
+          res.status(500).send({
+            success: false,
+            error: error || result?.message || "Transaction failed",
+          });
         }
       }
     );
   } catch (error) {
-    console.log(error);
+    console.error("Payment error:", error);
+    res.status(500).send({
+      success: false,
+      error: "Something went wrong while processing payment",
+    });
   }
 };
+
 
 // review
 export const addReviewController = async (req, res) => {
@@ -446,4 +476,37 @@ export const addReviewController = async (req, res) => {
 //     res.status(500).json({ error: "Internal Server Error" });
 //   }
 // };
+
+
+export const placeOrder = async (req, res) => {
+  try {
+    const { products, buyer, paymentMethod } = req.body;
+
+    if (!products || !buyer || !paymentMethod) {
+      return res.status(400).json({ success: false, error: "Missing fields" });
+    }
+
+    const newOrder = new Order({
+      products,
+      buyer,
+      payment: {
+        method: paymentMethod,
+        status: paymentMethod === "cod" ? "Pending" : "Paid", // ✅ Correct
+        success: paymentMethod === "cod" ? false : true,      // ✅ Correct
+        details: {}, // Optional: empty object for COD
+      },
+      
+      status: "Not Process",
+    });
+
+    await newOrder.save();
+
+    res.status(201).json({ success: true, order: newOrder });
+  } catch (err) {
+    console.error("Order placement error:", err);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+};
+
+
 
